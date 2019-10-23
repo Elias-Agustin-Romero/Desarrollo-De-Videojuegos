@@ -16,7 +16,7 @@ func _ready():
 
 func _fixed_process(delta):
 	var is_moving = Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_down") or Input.is_action_pressed("ui_up")
-	var axis = get_input_axis()#	
+	var axis = get_input_axis()
 	#if axis == Vector2(0,0):
 	#	apply_friction(ACCEL * delta)
 	#	pass
@@ -25,10 +25,10 @@ func _fixed_process(delta):
 	#se usaba para aplicar movimiento suavizado
 	
 	update_animation(motion)
-	
-	motion = move_and_slide(axis * MAX_SPEED)
 	if is_colliding():
-		check_box_collision(motion)
+		check_box_collision(axis * MAX_SPEED)
+
+	motion = move_and_slide(axis * MAX_SPEED)
 	if is_moving:
 		emit_signal("move")
 		
