@@ -3,7 +3,6 @@ extends KinematicBody2D
 onready var animated_sprite = get_node("sprite")
 onready var physicsBox = get_parent().get_node("level/PhysicsBox")
 
-#var ACCEL = 1500
 export var MAX_SPEED = 400
 export var push_speed = 200
 
@@ -17,16 +16,10 @@ func _ready():
 func _fixed_process(delta):
 	var is_moving = Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_down") or Input.is_action_pressed("ui_up")
 	var axis = get_input_axis()
-	#if axis == Vector2(0,0):
-	#	apply_friction(ACCEL * delta)
-	#	pass
-	#else:
-	#	apply_movement(MAX_SPEED)
-	#se usaba para aplicar movimiento suavizado
 	
 	update_animation(motion)
 	if is_colliding():
-		check_box_collision(axis * MAX_SPEED)
+		check_box_collision(axis * push_speed)
 
 	motion = move_and_slide(axis * MAX_SPEED)
 	if is_moving:
@@ -37,16 +30,8 @@ func get_input_axis():
 	axis.x = Input.is_action_pressed("ui_right") - Input.is_action_pressed("ui_left")
 	axis.y = Input.is_action_pressed("ui_down") - Input.is_action_pressed("ui_up")
 	return axis.normalized()
-	
-#func apply_friction(amount):
-#	if motion.length() > amount:
-#		motion -= motion.normalized() * amount
-#	else:
-#		motion = Vector2(0, 0)
-#func apply_movement(acceleration):
-#	motion += acceleration
-#	motion = motion.clamped(MAX_SPEED)
-	
+
+
 func update_animation(motion):
 	var animation = "Idle"
 	if motion.x > 0:
@@ -65,3 +50,6 @@ func check_box_collision(motion):
 	var box = get_collider()
 	if box.get_type() == physicsBox.get_type():
 		box.push(motion)
+
+func get_name():
+	return "Player"
